@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rock Paper Scissors</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Orbitron:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container-fluid game-container">
+        <!-- Theme Toggle -->
+        <div class="theme-toggle">
+            <button id="theme-toggle-btn" class="btn">
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
+
+        <!-- Sound Toggle -->
+        <div class="sound-toggle">
+            <button id="sound-toggle-btn" class="btn">
+                <i class="fas fa-volume-up"></i>
+            </button>
+        </div>
+
+        <!-- Settings Button -->
+        <div class="settings-toggle">
+            <button id="settings-btn" class="btn" data-bs-toggle="modal" data-bs-target="#settingsModal">
+                <i class="fas fa-cog"></i>
+            </button>
+        </div>
+
+        <!-- Game Title -->
+        <div class="row justify-content-center mb-4">
+            <div class="col-12 text-center">
+                <h1 class="game-title">Rock Paper Scissors</h1>
+            </div>
+        </div>
+
+        <!-- Main Game Layout -->
+        <div class="row game-layout">
+            <!-- Left Side - Results Panel -->
+            <div class="col-md-4 results-panel">
+                <!-- Score Board -->
+                <div class="score-board mb-4">
+                    <div class="score-card player-score">
+                        <h3>You</h3>
+                        <p id="player-score">0</p>
+                    </div>
+                    <div class="score-card rounds">
+                        <h3>Round</h3>
+                        <p id="round-number">0</p>
+                    </div>
+                    <div class="score-card computer-score">
+                        <h3>Computer</h3>
+                        <p id="computer-score">0</p>
+                    </div>
+                </div>
+
+                <!-- Game Status -->
+                <div class="game-status mb-4">
+                    <h2 id="status-message">Choose your weapon!</h2>
+                </div>
+
+                <!-- Match History -->
+                <div class="match-history">
+                    <h3 class="history-title"><i class="fas fa-trophy me-2"></i>Current Match</h3>
+                    <div class="match-rounds" id="match-rounds">
+                        <!-- Match rounds will be added here via JavaScript -->
+                        <div class="empty-match-message">
+                            <p>Make your first move to start the game!</p>
+                        </div>
+                    </div>
+                    <div class="action-buttons mt-4">
+                        <button id="reset-btn" class="btn action-btn">
+                            <i class="fas fa-redo"></i> Reset Game
+                        </button>
+                        <button id="history-btn" class="btn action-btn" data-bs-toggle="modal" data-bs-target="#historyModal">
+                            <i class="fas fa-history"></i> Game History
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Side - Game Board -->
+            <div class="col-md-8 game-board">
+                <!-- Game Arena -->
+                <div class="game-arena mb-5">
+                    <div class="player-choice">
+                        <div class="choice-container">
+                            <div id="player-choice-display" class="choice-display">
+                                <i class="fas fa-question"></i>
+                            </div>
+                        </div>
+                        <h3>Your Choice</h3>
+                    </div>
+                    
+                    <div class="vs-container">
+                        <div class="vs-circle">
+                            <span>VS</span>
+                        </div>
+                    </div>
+                    
+                    <div class="computer-choice">
+                        <div class="choice-container">
+                            <div id="computer-choice-display" class="choice-display">
+                                <i class="fas fa-question"></i>
+                            </div>
+                        </div>
+                        <h3>Computer's Choice</h3>
+                    </div>
+                </div>
+
+                <!-- Choice Buttons -->
+                <div class="choice-buttons mb-4">
+                    <button id="rock" class="choice-btn">
+                        <div class="choice-icon rock-icon">
+                            <i class="fas fa-hand-rock"></i>
+                        </div>
+                        <span>Rock</span>
+                    </button>
+                    <button id="paper" class="choice-btn">
+                        <div class="choice-icon paper-icon">
+                            <i class="fas fa-hand-paper"></i>
+                        </div>
+                        <span>Paper</span>
+                    </button>
+                    <button id="scissors" class="choice-btn">
+                        <div class="choice-icon scissors-icon">
+                            <i class="fas fa-hand-scissors"></i>
+                        </div>
+                        <span>Scissors</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="game-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-left">
+                    <p class="designer-credit">Designed & Developed by Joker Designs</p>
+                </div>
+                <div class="footer-right">
+                    <div class="footer-links">
+                        <ul>
+                            <li><a href="#" data-bs-toggle="modal" data-bs-target="#historyModal">Game History</a></li>
+                            <li><a href="#" data-bs-toggle="modal" data-bs-target="#settingsModal">Settings</a></li>
+                            <li><a href="#" data-bs-toggle="modal" data-bs-target="#otherFeaturesModal">Other Features</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- Footer bottom section removed as requested -->
+        </div>
+    </footer>
+
+    <!-- Settings Modal -->
+    <div class="modal fade" id="settingsModal" tabindex="-1" aria-labelledby="settingsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content settings-modal">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="settingsModalLabel">
+                        <i class="fas fa-sliders-h me-2"></i>Game Settings
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-0">
+                    <div class="settings-container">
+                        <!-- Settings Navigation -->
+                        <div class="settings-nav">
+                            <div class="nav-item active" data-tab="appearance">
+                                <i class="fas fa-palette"></i>
+                                <span>Appearance</span>
+                            </div>
+                            <div class="nav-item" data-tab="gameplay">
+                                <i class="fas fa-gamepad"></i>
+                                <span>Gameplay</span>
+                            </div>
+                            <div class="nav-item" data-tab="sound">
+                                <i class="fas fa-volume-up"></i>
+                                <span>Sound</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Settings Content -->
+                        <div class="settings-content">
+                            <!-- Appearance Tab -->
+                            <div class="settings-tab active" id="appearance-tab">
+                                <h6 class="settings-heading">Theme Selection</h6>
+                                <p class="settings-description">Choose a theme that matches your style</p>
+                                
+                                <div class="theme-grid">
+                                    <div class="theme-card" data-theme="default">
+                                        <div class="theme-preview default-preview">
+                                            <div class="preview-header"></div>
+                                            <div class="preview-content"></div>
+                                        </div>
+                                        <div class="theme-info">
+                                            <div class="color-preview default-theme"></div>
+                                            <span>Default</span>
+                                        </div>
+                                        <div class="theme-check"><i class="fas fa-check-circle"></i></div>
+                                    </div>
+                                    
+                                    <div class="theme-card" data-theme="neon">
+                                        <div class="theme-preview neon-preview">
+                                            <div class="preview-header"></div>
+                                            <div class="preview-content"></div>
+                                        </div>
+                                        <div class="theme-info">
+                                            <div class="color-preview neon-theme"></div>
+                                            <span>Neon</span>
+                                        </div>
+                                        <div class="theme-check"><i class="fas fa-check-circle"></i></div>
+                                    </div>
+                                    
+                                    <div class="theme-card" data-theme="pastel">
+                                        <div class="theme-preview pastel-preview">
+                                            <div class="preview-header"></div>
+                                            <div class="preview-content"></div>
+                                        </div>
+                                        <div class="theme-info">
+                                            <div class="color-preview pastel-theme"></div>
+                                            <span>Pastel</span>
+                                        </div>
+                                        <div class="theme-check"><i class="fas fa-check-circle"></i></div>
+                                    </div>
+                                    
+                                    <div class="theme-card" data-theme="dark">
+                                        <div class="theme-preview dark-preview">
+                                            <div class="preview-header"></div>
+                                            <div class="preview-content"></div>
+                                        </div>
+                                        <div class="theme-info">
+                                            <div class="color-preview dark-theme"></div>
+                                            <span>Dark</span>
+                                        </div>
+                                        <div class="theme-check"><i class="fas fa-check-circle"></i></div>
+                                    </div>
+                                </div>
+                                
+                                <h6 class="settings-heading mt-4">Animation Speed</h6>
+                                <p class="settings-description">Adjust how fast animations play</p>
+                                
+                                <div class="speed-setting">
+                                    <div class="speed-value">
+                                        <i class="fas fa-tachometer-alt"></i>
+                                        <span id="speed-value">Normal</span>
+                                    </div>
+                                    <div class="speed-slider">
+                                        <input type="range" class="form-range custom-range" id="animation-speed" min="0" max="2" step="1" value="1">
+                                        <div class="speed-labels">
+                                            <span>Slow</span>
+                                            <span>Normal</span>
+                                            <span>Fast</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Gameplay Tab -->
+                            <div class="settings-tab" id="gameplay-tab">
+                                <h6 class="settings-heading">Difficulty Level</h6>
+                                <p class="settings-description">Select how challenging you want the computer opponent to be</p>
+                                
+                                <div class="difficulty-options">
+                                    <div class="difficulty-card">
+                                        <input class="difficulty-input" type="radio" name="difficulty" id="easy-mode" value="easy" checked>
+                                        <label class="difficulty-label" for="easy-mode">
+                                            <div class="difficulty-icon">
+                                                <i class="fas fa-baby"></i>
+                                            </div>
+                                            <div class="difficulty-info">
+                                                <h6>Easy</h6>
+                                                <p>Computer makes random choices</p>
+                                            </div>
+                                            <div class="difficulty-check">
+                                                <i class="fas fa-check-circle"></i>
+                                            </div>
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="difficulty-card">
+                                        <input class="difficulty-input" type="radio" name="difficulty" id="medium-mode" value="medium">
+                                        <label class="difficulty-label" for="medium-mode">
+                                            <div class="difficulty-icon">
+                                                <i class="fas fa-user"></i>
+                                            </div>
+                                            <div class="difficulty-info">
+                                                <h6>Medium</h6>
+                                                <p>Computer uses basic strategy</p>
+                                            </div>
+                                            <div class="difficulty-check">
+                                                <i class="fas fa-check-circle"></i>
+                                            </div>
+                                        </label>
+                                    </div>
+                                    
+                                    <div class="difficulty-card">
+                                        <input class="difficulty-input" type="radio" name="difficulty" id="hard-mode" value="hard">
+                                        <label class="difficulty-label" for="hard-mode">
+                                            <div class="difficulty-icon">
+                                                <i class="fas fa-robot"></i>
+                                            </div>
+                                            <div class="difficulty-info">
+                                                <h6>Hard</h6>
+                                                <p>Computer adapts to your play style</p>
+                                            </div>
+                                            <div class="difficulty-check">
+                                                <i class="fas fa-check-circle"></i>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Sound Tab -->
+                            <div class="settings-tab" id="sound-tab">
+                                <h6 class="settings-heading">Sound Effects</h6>
+                                <p class="settings-description">Adjust volume or turn off game sounds</p>
+                                
+                                <div class="sound-toggle-container">
+                                    <div class="sound-toggle-label">
+                                        <i class="fas fa-volume-up"></i>
+                                        <span>Sound Effects</span>
+                                    </div>
+                                    <label class="switch">
+                                        <input type="checkbox" id="sound-toggle-checkbox" checked>
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+                                
+                                <div class="volume-container mt-4">
+                                    <div class="volume-value">
+                                        <i class="fas fa-volume-up"></i>
+                                        <span id="volume-value">50%</span>
+                                    </div>
+                                    <div class="volume-slider">
+                                        <input type="range" class="form-range custom-range" id="sound-volume" min="0" max="100" step="10" value="50">
+                                        <div class="volume-labels">
+                                            <span>0%</span>
+                                            <span>50%</span>
+                                            <span>100%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="save-settings">
+                        <i class="fas fa-save me-2"></i>Save Settings
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- History Modal -->
+    <div class="modal fade" id="historyModal" tabindex="-1" aria-labelledby="historyModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content history-modal">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="historyModalLabel">
+                        <i class="fas fa-trophy me-2"></i>Game Statistics & History
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-0">
+                    <div class="history-container">
+                        <!-- Stats Section -->
+                        <div class="stats-section">
+                            <div class="stats-header">
+                                <h6 class="stats-heading">Your Performance</h6>
+                                <p class="stats-description">Track your wins, losses, and overall progress</p>
+                            </div>
+                            
+                            <!-- Performance Summary -->
+                            <div class="performance-summary">
+                                <div class="win-rate-chart">
+                                    <div class="donut-chart-container">
+                                        <div class="donut-chart">
+                                            <div class="donut-segment win-segment"></div>
+                                            <div class="donut-segment loss-segment"></div>
+                                            <div class="donut-segment draw-segment"></div>
+                                            <div class="donut-hole">
+                                                <div class="win-rate-text">
+                                                    <span id="win-rate-percentage">0%</span>
+                                                    <span class="win-rate-label">Win Rate</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="stats-cards">
+                                    <div class="stat-card total-card">
+                                        <div class="stat-icon">
+                                            <i class="fas fa-gamepad"></i>
+                                        </div>
+                                        <div class="stat-info">
+                                            <h6>Total Games</h6>
+                                            <p id="total-games">0</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="stat-card win-card">
+                                        <div class="stat-icon">
+                                            <i class="fas fa-crown"></i>
+                                        </div>
+                                        <div class="stat-info">
+                                            <h6>Wins</h6>
+                                            <p id="total-wins">0</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="stat-card loss-card">
+                                        <div class="stat-icon">
+                                            <i class="fas fa-thumbs-down"></i>
+                                        </div>
+                                        <div class="stat-info">
+                                            <h6>Losses</h6>
+                                            <p id="total-losses">0</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="stat-card draw-card">
+                                        <div class="stat-icon">
+                                            <i class="fas fa-handshake"></i>
+                                        </div>
+                                        <div class="stat-info">
+                                            <h6>Draws</h6>
+                                            <p id="total-draws">0</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Recent Performance -->
+                            <div class="recent-performance">
+                                <h6 class="stats-heading">Recent Games</h6>
+                                <p class="stats-description">Your last 10 games</p>
+                                
+                                <div class="recent-games-list" id="recent-games-list">
+                                    <!-- Recent games will be added here via JavaScript -->
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- History Table Section -->
+                        <div class="history-table-section">
+                            <div class="table-header">
+                                <h6 class="stats-heading">Game History</h6>
+                                <p class="stats-description">Detailed record of all your games</p>
+                                
+                                <div class="table-actions">
+                                    <div class="table-filter">
+                                        <select class="form-select form-select-sm" id="history-filter">
+                                            <option value="all">All Results</option>
+                                            <option value="win">Wins Only</option>
+                                            <option value="lose">Losses Only</option>
+                                            <option value="draw">Draws Only</option>
+                                        </select>
+                                    </div>
+                                    <button class="btn btn-sm btn-outline-danger" id="clear-history">
+                                        <i class="fas fa-trash-alt me-1"></i> Clear History
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="history-table-container">
+                                <table class="table table-hover history-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Round</th>
+                                            <th>Your Choice</th>
+                                            <th>Computer</th>
+                                            <th>Result</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="history-table-body">
+                                        <!-- History entries will be added here -->
+                                    </tbody>
+                                </table>
+                                
+                                <div class="empty-history-message" id="empty-history-message">
+                                    <i class="fas fa-history"></i>
+                                    <p>No game history yet. Start playing to record your games!</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-1"></i> Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Other Features Modal -->
+    <div class="modal fade" id="otherFeaturesModal" tabindex="-1" aria-labelledby="otherFeaturesModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content features-modal">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="otherFeaturesModalLabel">
+                        <i class="fas fa-gamepad me-2"></i>More Games
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="games-grid">
+                        <!-- WORDVERSE PUZZLE Game -->
+                        <div class="game-card">
+                            <div class="game-image wordverse-image">
+                                <div class="game-overlay">
+                                    <a href="https://boisterous-zabaione-270e06.netlify.app/" target="_blank" class="btn btn-primary">Play Now</a>
+                                </div>
+                            </div>
+                            <div class="game-info">
+                                <h4>WORDVERSE PUZZLE</h4>
+                                <p>Challenge your vocabulary skills with this engaging word puzzle game.</p>
+                                <div class="game-tags">
+                                    <span class="game-tag">Word Game</span>
+                                    <span class="game-tag">Puzzle</span>
+                                    <span class="game-tag">Educational</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Tic Tac Toe Game -->
+                        <div class="game-card">
+                            <div class="game-image tictactoe-image">
+                                <div class="game-overlay">
+                                    <a href="https://tictactoejoker.netlify.app/" target="_blank" class="btn btn-primary">Play Now</a>
+                                </div>
+                            </div>
+                            <div class="game-info">
+                                <h4>Tic Tac Toe</h4>
+                                <p>The classic game of X's and O's with a modern twist. Challenge the computer or play with a friend.</p>
+                                <div class="game-tags">
+                                    <span class="game-tag">Strategy</span>
+                                    <span class="game-tag">Classic</span>
+                                    <span class="game-tag">Multiplayer</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-1"></i> Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Result Animation Container -->
+    <div id="result-animation" class="result-animation">
+        <div class="result-text"></div>
+    </div>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- GSAP Animation Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+    <!-- Custom JS -->
+    <script src="js/script.js"></script>
+</body>
+</html>
